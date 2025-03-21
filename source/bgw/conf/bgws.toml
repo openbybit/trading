@@ -1,0 +1,39 @@
+[App]
+cluster = ""
+enable_mock_login = true
+disable_subscribe_check = true
+enable_topic_conflict_check = true
+auth_tick_enable = false
+stop_wait_time = "20ms"
+
+[WS]
+listen_port=8081
+enable_registry=true
+routes = [
+    "/realtime_private",
+    "/realtime_private_{index}_{capacity}",
+    "/contract/private/v3",
+    "/trade/option/usdc/private/v1",
+    "/unified/private/v3",
+    "/v5/private",
+    "/private",
+]
+
+[RPC]
+listen_type = "all"
+listen_tcp_port=8060
+
+[Alert]
+path="/open-apis/bot/v2/hook/0d8c7b3e-663e-4b06-9e02-f393ec4f5ad7"
+
+[Kafka.Client]
+Brokers = ["k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9090", "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9091", "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9092"]
+
+[MASQ_RPC.Nacos]
+key="masq"
+
+[USER_RPC.Nacos]
+key="user-service-private"
+
+[BAN_RPC.Nacos]
+key="ban_service_private.rpc"

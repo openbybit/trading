@@ -1,0 +1,28 @@
+package constant
+
+const (
+	Origin          = "Origin"
+	BrokerID        = "X-WL-Broker-Id"
+	SiteID          = "x-refer-site-id"
+	XOriginFrom     = "X-Origin-From"
+	DeviceID        = "device-id"
+	Guid            = "guid"
+	XClientTag      = "X-Client-Tag"
+	CallOrigin      = "callOrigin"
+	Baggage         = "baggage"
+	XLaneEnv        = "x-lane-env"
+	ReqInitAtE9     = "ReqInitAtE9"
+	Platform        = "platform"
+	XAKMTraceID     = "x-amzn-trace-id"
+	Lang            = "Lang"
+	AcceptLanguage  = "Accept-Language"
+	UserToken       = "UserToken"
+	XReferer        = "X-Referer"
+	Referer         = "Referer"
+	SetCookie       = "Set-Cookie"
+	Cookie          = "Cookie"
+	OptionPlatform  = "_platform"
+	UserAgent       = "User-Agent"
+	GFingerprint    = "gdfp"
+	CtxInvokeResult = "invoke.result"
+)

@@ -1,0 +1,139 @@
+# nacos used for rpc discoery
+[Nacos]
+key = "bgw"
+Username = "bybit-nacos"
+Password = "bybit-nacos"
+NamespaceId = "unify-test-1"
+Group = "DEFAULT_GROUP"
+[[Nacos.ServerConfigs]]
+Address = "nacos.test.infra.ww5sawfyut0k.bitsvc.io:8848"
+
+# 合规墙
+[Compliance]
+NonBlock = true
+[ComplianceRpc.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[Compliance.Nacos]
+Key = "compliance_wall.rpc"
+
+[ComplianceKafkaCli.Client]
+Brokers = ["k8s-istiosys-bybittes-d6ee46754a-f7b06eb42e2fcb36.elb.ap-southeast-1.amazonaws.com:9093", "k8s-istiosys-bybittes-d6ee46754a-f7b06eb42e2fcb36.elb.ap-southeast-1.amazonaws.com:9094", "k8s-istiosys-bybittes-d6ee46754a-f7b06eb42e2fcb36.elb.ap-southeast-1.amazonaws.com:9095"]
+
+# user
+[UserServicePrivate]
+NonBlock = true
+[UserServicePrivate.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[UserServicePrivate.Nacos]
+Key = "user-service-private"
+
+[User]
+[User.Options]
+private_key = ["""sec.decrypt{{cCCJmP8igdF8pcDB/1Kz6/PDvBpuz+DMztg2xr12DZCXob6AJMCd321c8wYsEszO/uQUMyvfTzwig08YpjiXZkgehyGkO5tFyk3JGthZZQDu88iu+W0yLKTneayHSIdWy+O9nPrVmnj9wk2XoMpUMlVCW9l+9PryCzMQFMN5VOV5UeXrZyZxrwQeA3iHVULkpwBG13J9u0tMBNoxuI0B9wQ/q3wnY2W7n/77w3T60xwBDr0lXDowZPSTQO56kQkFPeKPpxHWoObalvYSVqb6wHjvnrlJvJ1RP08W0wWEnttzUBmNi27fvTdGL7b/ZE1/Ow/RRqyqg6SB8T1aV5LhHadJFyGMG8mbI2H/JmhJn2a9ETHWvDQe5gFQPs7AleJ8etVkL5G0tFI+luEYQJNE7kS/rcnQrgyGM06YN7w7qYYXq3HdVevVgh+fuxUcYGdOs4x19+llug8TNq/WnJOG0Wxjvi5s0p+MhnDTFNZFMzWOfZ++ZGYGMfjnx2g01aVaXHEr2UNnA9wR0Ury1y7WG/fwhY7jPZMqZQKv4Q+ghcl0aW2546xz9pTTOPjFlo0yuP5F4SeIKYal/Wa0uDjtKPEncYzQ/jKUQZ4Ckcd3Pqa8PhWuemJk8YdGQeryFFkoNyNOzv7Y+rkMqxV3z++iWkIUybM2KJh+8ghR5elbpYCG5re+buTYqWsrN9P9drbatD34dCt2SuoN/j+jAJmhYnhOTZu1xvYFy+TJzbmtegHW1MH5KlcgB/3HNSipMu6B7Ri11Oz0DsMKTeWnkiWN4rkU7YVdb9NpKmPtVqRN+4cO+R4Er/SzpTUw+apPMi4sHn2TPh1YeU0Zjq+6IhQ2EASi9onm3DXSud4uJhx/n+fRcnp7xTdnSS4Y/AuL9Xn/QGccpbQBE9pW66jA2xgxj0jRSK4y8/14QS/0kk8qJI+PK8jpSzLtMioVqHUHostOJsPz+EBew9rC5wFZf3zjNuXbVJ4KI/dqZtCfVUGzLVEjmVlLpq6QZE2CflwI0nCOJdlIjqap7L3Ha+EmToGIIfeV93v7Qv7gJJ/MRzkUqSlm933/wWZs9T2p7DEmgXJuzkzK/4utfylFX1Bn0mLQ1TI126IWiHr62rsicgHMgvNCOG934tETQQ==}}"""]
+
+# masp
+[Masq]
+NonBlock = true
+[Masq.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[Masq.Nacos]
+Key = "masq"
+
+# smp
+[Smp]
+Protocol = "grpc"
+Address = "omp-instmng-unify-dev-1.test2.efficiency.ww5sawfyut0k.bitsvc.io:9090"
+Timeout =  "30s"
+[Smp.Options]
+Registry = ["instmng"]
+
+[SmpKafkaCli.Client]
+Brokers = ["k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9090", "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9091", "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9092"]
+AuthType = "password"
+SaslUsername = "a"
+SaslPassword = "b"
+SaslMechanism = "SCRAM-SHA-256"
+
+[OpenInterest]
+Protocol = ""
+Address = ""
+[OpenInterest.Options]
+k123 = ["kafka-internal-kafka-0:9094,kafka-internal-kafka-1:9094,kafka-internal-kafka-2:9094"]
+kabc = ["kafka-internal-kafka-0:9094,kafka-internal-kafka-1:9094,kafka-internal-kafka-2:9094"]
+kusdc = ["kafka-internal-kafka-0:9094,kafka-internal-kafka-1:9094,kafka-internal-kafka-2:9094"]
+topic = ["open_interest_exceeded_result.%s"]
+enable_log_result = ["true"]
+enable_inverse_coin = ["true"]
+enable_linear_usdt_coin = ["true"]
+enable_linear_usdc_coin = ["true"]
+
+[Mixer]
+NonBlock = true
+[MixerOpenapiRpc.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[Mixer.Nacos]
+Key = "mixer-openapi"
+
+[BanServicePrivate]
+NonBlock = true
+[BanServicePrivateRpc.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[BanServicePrivate.Nacos]
+Key = "ban_service_private.rpc"
+
+[UtaRouter]
+NonBlock = true
+[UtaRouterRpc.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[UtaRouter.Nacos]
+Key = "uta_router"
+
+[UtaRouterDa]
+NonBlock = true
+[UtaRouterDa.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[UtaRouterDa.Nacos]
+Key = "uta_router_da"
+
+[Oauth]
+NonBlock = true
+[Oauth.Middlewares]
+Trace = true
+Prometheus = true
+Breaker = true
+Duration = false
+Timeout = false
+[Oauth.Nacos]
+Key = "oauth-private"
+
+[Bsp]
+[Bsp.Options]
+public_key = ["MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAp7gFtRtppI3SPWUAEhxJ5JR+6Wc2CIXs04b7ppC2NMr6Wbu5isEALEDXkUfFpwPiAmlgUV00sDOaB0ZC6Uq4cD4fazTTiE7Do4Dwgxl7w0u0YDn0vezhZUhn6Ekd7rPOZzXVctKCevIdDDTcSEihnToRgmEtqcV3y1h/0nWGWHAo3uvOe1SCdttG0yO9fD3hqWHeypWqmVc/E2FNsGc7GX5+jeE7b3uQdRiAD25qI83TIs9j/1nXo02aSGq2GMxD9Nt0Bxu0VUmWX41Ian3Yzci0HNUPKaNOQHeNAATBEOvLSNSvypypXjDqtWkmEwGzSGo4sKFr6ZkXM2IKAvI2jQIDAQAB"]

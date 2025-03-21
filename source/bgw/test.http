@@ -1,0 +1,24 @@
+@localhost = 127.0.0.1
+@test-gateway = 10.110.54.155
+@trading-dev-1 = 10.18.1.44
+@asset_test_1 = 10.18.1.12
+@port = 8080
+@statePort = 6480
+@host = {{localhost}}:{{port}}
+@stateHost = {{localhost}}:{{statePort}}
+@contentType = application/json
+@createdAt = {{$datetime iso8601}}
+@traceID = 09d12df68aed8fef:09d12df68aed8fef:0000000000000000:1
+
+### gateway state
+GET  /state
+Host: {{stateHost}}
+Content-Type: {{contentType}}
+Cache-Control: no-cache
+
+### get hello
+GET  /hello/get?name=foo&age=20
+Host: {{host}}
+Content-Type: {{contentType}}
+Cache-Control: no-cache
+uber-trace-id: {{traceID}}

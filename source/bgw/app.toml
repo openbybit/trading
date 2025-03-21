@@ -1,0 +1,4 @@
+debug=true
+api_debug=true
+[logger]
+level=40

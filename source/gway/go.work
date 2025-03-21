@@ -1,0 +1,30 @@
+go 1.19
+
+use (
+	./galert
+	./gapp
+	//./gcompliance
+	./gconfig
+	./gcore
+	./generic
+	./geo
+	./getcd
+	./gflag
+	./gformula
+	./ggrpc
+	./ghdts
+	./ghttp
+	./gkafka
+	./glog
+	./gmetric
+	./gnacos
+	./gopeninterest
+	./gquote
+	./gredis
+	./groute
+	./gs3
+	./gsechub
+	./gsmp
+	./gsymbol
+	./gtrace
+)

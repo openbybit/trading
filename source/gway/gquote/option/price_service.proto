@@ -1,0 +1,281 @@
+syntax = "proto3";
+
+import "money.proto";
+
+// option java_multiple_files = true;
+// option java_package = "com.bybit.option.quote.index";
+option go_package = "quote/index";
+
+// package gway.quote.index;
+
+message UnderlyingPriceRequest {
+  string baseCoin = 1;        //标的币种， BTC/ETH
+  string quoteCoin = 2;       //结算币种，USD
+  int64 expireTime = 3;       //到期时间
+  int64 timestamp = 4;        //UNIX时间戳，秒级
+  string reqId = 100;
+}
+
+/**
+* 标的资产价格模型
+* 订阅channel: underlying.${base_coin}_${quote_coin}.${expire_time}
+* example: underlying.btc_usd.2021_09_30
+**/
+message UnderlyingPrice {
+  string baseCoin = 1;        //标的币种， BTC/ETH
+  string quoteCoin = 2;       //结算币种，USD
+  int64 expireTime = 3;       //到期时间，UNIX时间戳，秒
+  Money underlyingPrice = 4;  //标的资产价格
+  int64 timestamp = 5;        //UNIX时间戳，秒级
+  Money underlyingOriginPrice = 6;  //标的资产价格, 原始值，交割前30分钟未替换成EDP
+
+  string reqId = 100;
+}
+
+message IndexPriceRequest {
+  string baseCoin = 1;        //标的币种， BTC/ETH
+  string quoteCoin = 2;       //结算币种，USD
+  int64 timestamp = 3;        //UNIX时间戳，秒级
+
+  string reqId = 100;
+}
+
+/**
+* 标的指数价格模型
+* 订阅channel: index_price.${base_coin}_${quote_coin}
+* example: index_price.btc_usd
+**/
+message IndexPrice {
+  string baseCoin = 1;        //标的币种， BTC/ETH
+  string quoteCoin = 2;       //结算币种，USD
+  Money indexPrice = 3;       //现货指数
+  int64 timestamp = 4;        //UNIX时间戳，秒级
+
+  string reqId = 100;
+}
+
+message EstimatedDeliveryPriceRequest {
+  string baseCoin = 1;        //标的币种， BTC/ETH
+  string quoteCoin = 2;       //结算币种，USD
+  int64 expireTime = 3;       //到期时间，UNIX时间戳，秒
+  int64 timestamp = 4;        //UNIX时间戳，秒级
+
+  string reqId = 100;
+}
+
+/**
+* 期权交割价格模型
+* 订阅channel: estimated_delivery_price.${base_coin}_${quote_coin}.${expire_time}
+* example: estimated_delivery_price.btc_usd.2021_09_30
+**/
+message EstimatedDeliveryPrice {
+  string baseCoin = 1;                //标的币种， BTC/ETH
+  string quoteCoin = 2;               //结算币种，USD
+  int64 expireTime = 3;               //到期时间，UNIX时间戳，秒
+  Money estimatedDeliveryPrice = 4;   //交割价格
+  int64 timestamp = 5;                //UNIX时间戳，秒级
+
+  string reqId = 100;
+}
+
+message MarkPriceRequest {
+  string symbolName = 1;              //期权名称， BTC-24JUN22-30000-C
+  string quoteCoin = 2;               //结算币种，USD
+  int64 timestamp = 3;                //UNIX时间戳，秒级
+
+  string reqId = 100;
+}
+
+message Greeks {
+  PrecisionDecimal delta = 1;
+  PrecisionDecimal gamma = 2;
+  PrecisionDecimal theta = 3;
+  PrecisionDecimal vega = 4;
+}
+
+/**
+* 标记价格模型
+* 订阅channel: mark_price.${symbol}.${quote_coin}
+* example: mark_price.BTC-24JUN22-30000-C.usd
+**/
+message MarkPrice {
+  string symbolName = 1;              //期权名称， BTC-24JUN22-30000-C
+  string quoteCoin = 2;               //结算币种，USD
+  Money markPrice = 3;                //标记价格
+  int64 timestamp = 4;                //UNIX时间戳，秒级
+  PrecisionDecimal markIV = 5;
+  Greeks greeks = 6;
+  PrecisionDecimal unSmoothMarkIV = 7;//未平滑markiv
+  string reqId = 100;
+}
+
+/**
+期货价格
+ */
+message FuturePrice {
+  string symbolName = 1;
+  string baseCoin = 2;
+  string quoteCoin = 3;
+  PrecisionDecimal indexPrice = 4;
+  PrecisionDecimal markPrice = 5;
+  /*系统计算时时间戳*/
+  int64 timestamp = 6;
+  /*数据来源的时间戳*/
+  int64 originalTimestamp = 7;
+  /*最新成交价,可空*/
+  PrecisionDecimal lastPrice = 8;
+}
+
+/**
+* 所有行情指数价格数据模型
+* 订阅channel: quote_price.${base_coin}_${quote_coin}
+* example: quote_price.btc_usd
+* 注意: 批量订阅行情指数价格，1秒推送一次，延迟略大于单次推送接口(delay < 1s)
+**/
+message QuotePrice {
+  int64 timestamp = 1;                                //UNIX时间戳，秒级
+  string base_coin = 2;                               //标的币种
+  string quote_coin = 3;                              //结算币种
+  Money indexPrice = 4;                               //指数价格
+  map<string, Money> markPriceMap = 5;                //${symbol_name} -> mark price
+  map<int64, Money> underlyingPriceMap = 6;           //${expire_time} -> underlying price
+  map<int64, Money> estimatedDeliveryPriceMap = 7;    //${expire_time} -> EDP
+  map<int64, Money> underlyingOriginPriceMap = 8;     //${expire_time} -> underlying price 标的资产价格, 原始值，交割前30分钟未替换成EDP
+  map<string, PrecisionDecimal> markIVMap = 9;
+  map<string, Greeks> greeksMap = 10;
+  map<string, PrecisionDecimal> unSmoothMarkIVMap = 11;//未平滑markiv
+  map<string, OrderBookPrice> orderBookPriceMap = 12;                //${symbol_name} -> orderBookItem
+
+  string reqId = 100;
+}
+/*ob价格数据*/
+message OrderBookPrice{
+  PrecisionDecimal bestAsk = 1;
+  PrecisionDecimal bestAskSize = 2;
+  PrecisionDecimal bestBid = 3;
+  PrecisionDecimal bestBidSize = 4;
+}
+
+
+/**
+ * 批量查询指数价格
+ * 最小批次查询同一个币种，同一到期日下所有期权的指数价格数据
+ */
+message QuotePriceRequest {
+  int64 timestamp = 1;    //UNIX时间戳, 默认最新时间
+  string baseCoin = 2;    //标的币种，必须填
+  string quoteCoin = 3;   //结算币种，必须填
+  int64 expireTime = 4;   //到期时间，UNIX时间戳，秒，为空默认查询所有到期日期权数据
+
+  string reqId = 100;
+}
+/*统一行情价格req*/
+message UnifyQuotePriceRequest {
+  /*固定填0*/
+  int64 timestamp = 1;
+  QuotePriceRequest optionPriceRequest = 2;
+  string reqId = 100;
+}
+/**
+统一行情价格
+ */
+message UnifyQuotePrice {
+  repeated QuotePrice optionPrice = 1;
+  repeated FuturePrice futurePrice = 2;
+
+  string reqId = 100;
+}
+
+/**兑换率Req*/
+message ExchangeRateRequest {
+  /*固定填0*/
+  int64 timestamp = 1;
+  string reqId = 100;
+}
+/**兑换率Resp*/
+message ExchangeRateResponse {
+  /*系统当前时间 (秒)*/
+  int64 timestamp = 1;
+  repeated ExchangeRate exchangeRate = 2;
+  string reqId = 100;
+}
+/** 兑换率*/
+message ExchangeRate {
+  /*原始币种USDT/USDC/BTC/ETH*/
+  string fromCoin = 1;
+  /*兑换币种USD*/
+  string toCoin = 2;
+  PrecisionDecimal rate = 3;
+  /*原始业务数据时间戳*/
+  int64 originalTimestamp = 4;
+}
+
+/**出售参考价Req*/
+message SellReferencePriceRequest {
+  /*固定填0*/
+  int64 timestamp = 1;
+  string reqId = 100;
+}
+/**出售参考价Resp*/
+message SellReferencePriceResponse {
+  /*系统当前时间 (秒)*/
+  int64 timestamp = 1;
+  repeated SellReferencePrice sellReferencePrice = 2;
+  string reqId = 100;
+}
+/** 出售参考价*/
+message SellReferencePrice {
+  /*原始币种*/
+  string fromCoin = 1;
+  /*出售币种USD*/
+  string toCoin = 2;
+  PrecisionDecimal rate = 3;
+  /*原始业务数据时间戳*/
+  int64 originalTimestamp = 4;
+}
+
+service IndexPriceService {
+  /**
+  * 查询行情指数数据， timestamp为空，则返回最新数据
+  * 查询历史数据，只能查询到历史1小说以内的数据
+  **/
+  rpc query(QuotePriceRequest) returns (QuotePrice);
+
+  /**
+  * 查询统一行情指数
+  **/
+  rpc queryUnifyQuotePrice(UnifyQuotePriceRequest) returns (UnifyQuotePrice);
+  /**
+  * 查询统一兑换率
+  * 每次返回最新的汇率结果
+   */
+  rpc queryExchangeRate(ExchangeRateRequest) returns(ExchangeRateResponse);
+  /**
+  * 查询最新出售参考价
+  * 每次返回最新的出售参考价
+   */
+  rpc querySellReferencePrice(SellReferencePriceRequest) returns(SellReferencePriceResponse);
+  /**
+  * 查询标的资产价格， timestamp为空，则返回最新数据
+  * 查询历史数据，只能查询到历史1小说以内的数据
+  **/
+  rpc queryUnderlyingPrice(UnderlyingPriceRequest) returns (UnderlyingPrice);
+
+  /**
+  * 查询现货指数价格， timestamp为空，则返回最新数据
+  * 查询历史数据，只能查询到历史1小说以内的数据
+  **/
+  rpc queryIndexPrice(IndexPriceRequest) returns (IndexPrice);
+
+  /**
+  * 查询标记价格， timestamp为空，则返回最新数据
+  * 查询历史数据，只能查询到历史1小说以内的数据
+  **/
+  rpc queryMarkPrice(MarkPriceRequest) returns (MarkPrice);
+
+  /**
+  * 查询交割价格， timestamp为空，则返回最新数据
+  * 查询历史数据，只能查询到历史1小说以内的数据
+  **/
+  rpc queryEstimatedDeliveryPrice(EstimatedDeliveryPriceRequest) returns (EstimatedDeliveryPrice);
+}

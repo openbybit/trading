@@ -1,0 +1,12 @@
+package constant
+
+const (
+	DEFAULT_PROTOCOL    = "grpc"
+	DEFAULT_REG_TIMEOUT = "10s"
+	DEFAULT_REG_TTL     = "15m"
+	DEFAULT_CATEGORY    = "provider"
+	ANY_VALUE           = "*"
+	REMOVE_VALUE_PREFIX = "-"
+	DATE_DEFAULT_LAYOUT = "2006-01-02T15:04:05.000Z"
+	DATE_COMPACT_LAYOUT = "20060102150405"
+)

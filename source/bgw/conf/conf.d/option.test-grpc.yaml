@@ -1,0 +1,16 @@
+app: option # 事业部
+module: test-grpc  # 模块名-grpc
+services:
+  - namespace: test-infra # 服务发现namespace
+    group: DEFAULT_GROUP # 服务发现group
+    registry: TestService # 服务发现服务名
+    selector: SELECTOR_ROUND_ROBIN # 服务负载均衡策略
+    package:  # grpc包名
+    name: TestService # grpc service名
+    protocol: grpc # 协议，固定grpc
+    filters: # 过滤器
+    methods:
+      - name: Ping # grpc方法名
+        filters: # 过滤器
+          - name: FILTER_AUTH
+            args: "--allowUnified=true"

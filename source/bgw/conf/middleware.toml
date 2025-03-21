@@ -1,0 +1,83 @@
+[Etcd]
+Protocol = "etcd"
+Address = "k8s-istiosys-bgwingre-b8ffef1e78-28540305a7ddd534.elb.ap-southeast-1.amazonaws.com:2379"
+Timeout = "30s" # second
+Username = ""
+Password = ""
+[Etcd.Options]
+heatbeat = ["5s"] # second
+
+[S3]
+Protocol = "s3"
+Address = "ap-southeast-1"
+Timeout = "30s"
+[S3.Options]
+cache = ["/data/bgw/cache/s3"]
+bucket = ["bbgw-gateway-protocol"]
+id = ["AKIATV4JO2MSPBCZUWHU"]
+secret = ["""sec.decrypt{{1/TqANZDd0UIeTFYi/c+f2DupXz9BQu7tOVe2SBrTf55nbxCWY3t0KeauYkhSwlxMWY0hPdGXmRBiROc0htuzcjyrlQ=}}"""]
+
+[Geo]
+Protocol = "https"
+Address = "download.maxmind.com"
+Timeout = "30s"
+[Geo.Options]
+license_key = ["""sec.decrypt{{IYHNIZq3VXKSzbxlnfD2CzAoOSyGsr3e78tW4If2422bJ2ADrfhXksQc4kc=}}"""]
+update_period = ["24h"]  # 24h, 24m, min 10m
+openapi_banned_countries = ["CN","US"]
+update = ["true"]
+
+[Tracing]
+Protocol = "jaeger"
+Address = "test-jaeger-agent-cluster.inner-udp.efficiency.ww5sawfyut0k.bitsvc.io:6831"
+Timeout = "30s"
+[Tracing.Options]
+sampling_server_url = ["http://trace-service.prod.efficiency.ww5sawfyut0k.bitsvc.io/api/v1/trace/sampling"]
+sample = ["1"]
+
+[Alert]
+Protocol = "https"
+Address = "open.larksuite.com"
+Timeout = "1s"
+[Alert.Options]
+path = ["/open-apis/bot/v2/hook/0d8c7b3e-663e-4b06-9e02-f393ec4f5ad7"]
+
+[WebConsole]
+Protocol = "nacos"
+Address = "open.larksuite.com"
+[WebConsole.Options]
+config_files = []
+
+[SechubCfg]
+Protocol = "sechub"
+Address = "10.18.1.99:9091"
+[SechubCfg.Options]
+app_name = ["bgw-_test"]
+app_sign_key = ["RlQKXx5WRwxTXUNURgJUAB5XQFBWWxIFRg9UWkBSQQ4="]
+tls_cert = ["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"]
+
+[NacosCfg]
+Protocol = "nacos"
+Address = "nacos.test.infra.ww5sawfyut0k.bitsvc.io:8848"
+Timeout = "30s"
+Username = "nacos"
+Password = "nacos"
+[NacosCfg.Options]
+cache = ["/tmp/data/cache/nacos"]
+log = ["/tmp/data/logs/nacos"]
+
+[Redis]
+Host = "10.112.0.64:6380"
+Pass = "pZ3HnxIuwRbtMQoi"
+Type = "cluster"
+PingTimeout = "2s"
+
+[KafkaCli.Client]
+Brokers = ["k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9090", "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9091", "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9092"]
+
+[Kafka]
+Protocol = "kafka"
+Address = "k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9090,k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9091,k8s-istiosys-unifytes-b5f00eb0c2-7e5143857d7256e2.elb.ap-southeast-1.amazonaws.com:9092" # unify-test-1
+Timeout = "30s"
+[Kafka.Options]
+enable_symbol_config_log = ["false"]

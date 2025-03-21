@@ -1,0 +1,46 @@
+[App]
+Name = "bgw"
+Mode = "debug" #debug, release
+Namespace = ""  #对应环境名，也取环境变量BGW_NAMESPACE=fbu-test-2
+Group = "BGW_GROUP" #测试环境均为BGW_GROUP
+QpsRate = 100000 #全局qps控制，可忽略
+UpstreamQpsRate = 1000 #上游qps限制
+NoHealthBlock = true
+Pprof = true #开启pprof
+BatWing = 6480 #网关状态监控端口，path为/state，可查看当前内存中的服务，路由，metrics等信息
+RedisDowngrade = false
+
+[Server]
+[Server.Http]
+Addr = 8080  #网关http服务监听端口
+ReadTimeout = 5 #时间s
+WriteTimeout = 10 #时间s
+IdleTimeout = 60 #时间s
+ReadBufferSize = 8192
+WriteBufferSize = 8192
+MaxRequestBodySize = 50  #Mb
+[Server.Http.ServiceRegistry]
+Enable = true
+ServiceName = "unify"
+
+[Data]
+Geo = "data/geoip"
+[Data.CacheSize]  #Mb
+AccountCacheSize = 256
+CopyTradeCacheSize = 96
+OpenapiCacheSize = 256
+BizLimitQuotaCacheSize = 128
+
+[Log] # zap logger config
+[Log.BgwLog]
+Type = "lumberjack" # lumberjack / stdout
+Format = "json" # json
+File =  "data/logs/bgw/bgw.log"
+MaxSize = 300 # megabytes
+MaxAge = 30 # days
+MaxBackups = 10 # is the maximum number of old log files to retain
+[Log.AccessLog]
+File = "data/logs/bgw/access.log"
+MaxSize = 300 # megabytes
+MaxAge =  30 # days
+MaxBackups = 5 # is the maximum number of old log files to retain

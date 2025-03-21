@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// option java_multiple_files = true;
+// option java_package = "com.bybit.option.common.model.money";
+option go_package = "quote/index";
+
+// package com.bybit.option.common.model.money;
+// package gway.quote.index;
+
+// 用于表示价格，金额相关的
+message Money {
+  int64 unscaledValue = 1;
+  int32 scale = 2;
+  string coin = 3;
+  optional string strValue = 4;
+}
+
+// 表示数量相关的
+message PrecisionDecimal {
+  int64 unscaledValue = 1;
+  int32 scale = 2;
+  optional string strValue = 3;
+}

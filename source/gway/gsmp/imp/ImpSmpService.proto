@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option go_package = "./imp";
+
+service ImpSmpService {
+
+  /**
+  查询IMP设置的 apilimit
+   */
+  rpc SmpGroupQuery(SmpGroupQueryReq) returns (SmpGroupQueryResp);
+
+}
+
+message SmpGroupQueryReq{
+  int64 uid   = 1; // 用户UID (非必传，不传返回全量smpGroup信息；uid值存在 查询uid对应机构的smp信息)
+  string reqId = 2; // 查询的ID，日志链路追踪使用
+}
+
+message SmpGroupQueryResp{
+  repeated SmpGroupConfigItem smp_groups = 1;
+  string                      retCode    = 2; // 0 : success
+  string                      retMsg     = 3; // 失败信息
+  string                      reqId      = 4; // 请求reqId
+}
+
+message SmpGroupConfigItem{
+  string                instId       = 1; // 机构ID
+  repeated SmpGroupItem instSmpGroup = 2; // 机构ID对应的smp配置信息
+}
+
+message SmpGroupItem{
+  int32          smpGroup = 1; // smpGroupId
+  repeated int64 uids     = 2; // smpGroup uids
+}

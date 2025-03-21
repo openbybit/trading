@@ -1,0 +1,26 @@
+app: option
+module: hello-http
+services:
+  - namespace: public
+    group: DEFAULT_GROUP
+    protocol: http
+    registry: HelloServiceHttp
+    selector: SELECTOR_ROUND_ROBIN
+    methods:
+      - httpMethod: HTTP_METHOD_POST
+        path: /http/post
+        filters:
+          - name: FILTER_AUTH
+          - name: FILTER_GEO_IP
+            args: '--metadata={"country":["iso", "iso3", "currencyCode", "geonameid"]}'
+      - httpMethod: HTTP_METHOD_GET
+        path: /http/get
+        filters:
+          - name: FILTER_AUTH
+      - httpMethod: HTTP_METHOD_ANY
+        path: /http/any
+      - httpMethod: HTTP_METHOD_GET
+        path: /http/header
+        filters:
+          - name: FILTER_CONTEXT
+            args: '--inboundHeader=["ABC","BBB"]'
